@@ -28,12 +28,12 @@ export function TeamSelector({ teams, selectedTeamId, onSelect }: TeamSelectorPr
   return (
     <div
       id="teams"
-      className="sticky top-[58px] z-40 border-y border-[#C8CDD0] bg-[#F3F4F4]/95 py-2 backdrop-blur"
+      className="sticky top-[52px] z-40 border-y border-[#C8CDD0] bg-[#F3F4F4]/95 py-2.5 backdrop-blur"
     >
       <div
         role="tablist"
         aria-label="Team schedule selector"
-        className="mx-auto flex w-full max-w-6xl gap-2 overflow-x-auto px-4 sm:px-6"
+        className="mx-auto flex w-full max-w-6xl gap-2.5 overflow-x-auto px-4 pb-0.5 sm:px-6"
       >
         {teams.map((team, index) => {
           const active = team.id === selectedTeamId;
@@ -50,10 +50,10 @@ export function TeamSelector({ teams, selectedTeamId, onSelect }: TeamSelectorPr
               tabIndex={active ? 0 : -1}
               onKeyDown={(event) => onKeyDown(event, index)}
               onClick={() => onSelect(team.id)}
-              className={`focus-ring whitespace-nowrap rounded-sm border px-4 py-2 font-[family-name:var(--font-display)] text-sm uppercase tracking-wide transition ${
+              className={`focus-ring min-h-11 whitespace-nowrap rounded-full border px-4 py-2 font-[family-name:var(--font-display)] text-sm uppercase tracking-wide transition ${
                 active
-                  ? "border-[#075C35] bg-[#075C35] text-white"
-                  : "border-[#C8CDD0] bg-white text-[#090A0A] hover:border-[#075C35]/50"
+                  ? "border-[#075C35] bg-[#075C35] text-white shadow-[0_6px_16px_rgba(7,92,53,0.28)]"
+                  : "border-[#C8CDD0] bg-white text-[#090A0A] hover:-translate-y-0.5 hover:border-[#075C35]/50 hover:shadow-sm"
               }`}
             >
               {team.name}
