@@ -5,10 +5,9 @@ import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
 type ScheduleTableProps = {
   games: Game[];
-  nextGameId?: string;
 };
 
-export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
+export function ScheduleTable({ games }: ScheduleTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-lg border border-[#C8CDD0] md:block">
       <table className="w-full border-collapse">
@@ -25,13 +24,10 @@ export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
         <tbody>
           {games.map((game) => {
             const mapLink = buildMapLink(game);
-            const isNext = game.id === nextGameId;
             return (
               <tr
                 key={game.id}
-                className={`border-t border-[#E5E7E7] transition hover:bg-[#F7F8F8] ${
-                  isNext ? "bg-[#F3F4F4]" : "bg-white"
-                }`}
+                className="border-t border-[#E5E7E7] bg-white transition hover:bg-[#F7F8F8]"
               >
                 <td className="px-4 py-4">
                   <p className="font-[family-name:var(--font-display)] text-lg uppercase text-[#090A0A]">
@@ -64,25 +60,18 @@ export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
                   ) : null}
                 </td>
                 <td className="px-4 py-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {isNext ? (
-                      <span className="rounded bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                        Next
-                      </span>
-                    ) : null}
-                    {game.homeAway === "away" && mapLink ? (
-                      <a
-                        href={mapLink}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="focus-ring inline-flex min-h-10 items-center rounded-md border border-black px-3 py-2 text-xs font-bold uppercase tracking-wide text-black transition hover:bg-black hover:text-white"
-                      >
-                        Get Directions
-                      </a>
-                    ) : (
-                      <span className="text-sm text-[#6b716e]">Home Game</span>
-                    )}
-                  </div>
+                  {game.homeAway === "away" && mapLink ? (
+                    <a
+                      href={mapLink}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="focus-ring inline-flex min-h-10 items-center rounded-md border border-black px-3 py-2 text-xs font-bold uppercase tracking-wide text-black transition hover:bg-black hover:text-white"
+                    >
+                      Get Directions
+                    </a>
+                  ) : (
+                    <span className="text-sm text-[#6b716e]">Home Game</span>
+                  )}
                 </td>
               </tr>
             );

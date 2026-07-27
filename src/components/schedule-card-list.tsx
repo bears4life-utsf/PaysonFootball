@@ -5,32 +5,23 @@ import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
 type ScheduleCardListProps = {
   games: Game[];
-  nextGameId?: string;
 };
 
-export function ScheduleCardList({ games, nextGameId }: ScheduleCardListProps) {
+export function ScheduleCardList({ games }: ScheduleCardListProps) {
   return (
     <ul className="space-y-3 md:hidden">
       {games.map((game) => {
         const mapLink = buildMapLink(game);
-        const isNext = game.id === nextGameId;
         return (
           <li
             key={game.id}
-            className={`rounded-lg border bg-white p-4 shadow-sm transition ${
-              isNext ? "border-[#075C35]/35" : "border-[#C8CDD0]"
-            }`}
+            className="rounded-lg border border-[#C8CDD0] bg-white p-4 shadow-sm transition"
           >
             <div className="flex flex-wrap items-center gap-2">
               <p className="font-[family-name:var(--font-display)] text-xl uppercase text-[#090A0A]">
                 {game.displayDate}
               </p>
               <span className="text-sm font-medium text-[#4f5854]">{game.time}</span>
-              {isNext ? (
-                <span className="rounded bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                  Next
-                </span>
-              ) : null}
             </div>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">

@@ -63,6 +63,14 @@ export function ScheduleSection() {
     () => getNextUpcomingGame(selectedTeam.games),
     [selectedTeam.games],
   );
+  // Exclude the featured Next Game from the list so it isn't shown twice.
+  const remainingGames = useMemo(
+    () =>
+      nextGame
+        ? selectedTeam.games.filter((game) => game.id !== nextGame.id)
+        : selectedTeam.games,
+    [nextGame, selectedTeam.games],
+  );
   const awayVenues = useMemo(() => getAwayVenues(selectedTeam), [selectedTeam]);
   const seasonState = useMemo(
     () => getSeasonState(selectedTeam.games),
@@ -157,11 +165,12 @@ export function ScheduleSection() {
                   <NextGamePanel game={nextGame} />
                 ) : null}
 
-                <ScheduleTable games={selectedTeam.games} nextGameId={nextGame?.id} />
-                <ScheduleCardList
-                  games={selectedTeam.games}
-                  nextGameId={nextGame?.id}
-                />
+                {remainingGames.length > 0 ? (
+                  <>
+                    <ScheduleTable games={remainingGames} />
+                    <ScheduleCardList games={remainingGames} />
+                  </>
+                ) : null}
                 <AwayVenueList venues={awayVenues} />
               </>
             )}
