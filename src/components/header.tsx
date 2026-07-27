@@ -23,7 +23,7 @@ export function Header() {
         }`}
       >
         <Link href="/" className="flex items-center gap-3 focus-ring rounded-sm">
-          <BrandLogo size="sm" />
+          <BrandLogo size="sm" priority />
           <div className="leading-tight">
             <p className="font-[family-name:var(--font-display)] text-lg uppercase tracking-wide">
               Payson Lions Football

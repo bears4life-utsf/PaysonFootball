@@ -1,28 +1,32 @@
+import Image from "next/image";
+
 type BrandLogoProps = {
   size?: "sm" | "md" | "lg";
   className?: string;
+  priority?: boolean;
 };
 
 const sizeMap = {
-  sm: "h-8 w-8 text-xs",
-  md: "h-11 w-11 text-sm",
-  lg: "h-14 w-14 text-base",
+  sm: { className: "h-9 w-9", pixels: 36 },
+  md: { className: "h-12 w-12", pixels: 48 },
+  lg: { className: "h-16 w-16", pixels: 64 },
 } as const;
 
-export function BrandLogo({ size = "md", className = "" }: BrandLogoProps) {
+export function BrandLogo({
+  size = "md",
+  className = "",
+  priority = false,
+}: BrandLogoProps) {
+  const { className: sizeClass, pixels } = sizeMap[size];
+
   return (
-    <span
-      aria-label="Payson Lions logo"
-      className={`relative inline-flex ${sizeMap[size]} items-center justify-center overflow-hidden rounded-full border border-white/20 bg-[#043D25] font-semibold text-white ${className}`}
-    >
-      <span
-        aria-hidden
-        className="absolute inset-0 bg-cover bg-center opacity-95"
-        style={{ backgroundImage: "url('/images/payson-lions-logo.png')" }}
-      />
-      <span className="relative font-[family-name:var(--font-display)] tracking-wide">
-        PL
-      </span>
-    </span>
+    <Image
+      src="/images/payson-lions-logo.png"
+      alt="Payson Lions logo"
+      width={pixels}
+      height={pixels}
+      className={`${sizeClass} object-contain ${className}`}
+      priority={priority}
+    />
   );
 }

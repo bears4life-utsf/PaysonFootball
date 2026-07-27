@@ -17,7 +17,7 @@ export function Hero() {
 
       <div className="relative mx-auto flex min-h-[60vh] w-full max-w-6xl flex-col justify-center px-4 py-14 sm:px-6 sm:py-20">
         <div className="motion-safe:hero-rise flex items-center gap-3">
-          <BrandLogo size="md" />
+          <BrandLogo size="md" priority />
           <p className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.22em] text-[#C8CDD0]">
             Payson Lions Football
           </p>
