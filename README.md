@@ -1,12 +1,13 @@
-# Payson Football
+# Payson Lions Football
 
-Website for **paysonfootball.com** — football schedules for all age groups in Payson, Utah.
+Production-ready one-page website for **paysonfootball.com** with team schedule switching and away-game travel links.
 
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router)
 - TypeScript
 - Tailwind CSS
+- Lucide React icons
 
 ## Getting started
 
@@ -17,10 +18,64 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Schedules
+## Schedule data
 
-Edit placeholder age groups and games in `src/data/schedules.ts`. Each age group can list games with date, time, teams, and location.
+Edit all teams and games in `src/data/schedules.ts`.
 
-## Deploy
+### 1) Add the Payson logo and hero image
 
-Push to GitHub, then connect the repo to Vercel (or similar) and point the Porkbun DNS for `paysonfootball.com` at the host.
+Put these files in `public/images`:
+
+- `payson-lions-logo.png`
+- `payson-football-hero.jpg`
+
+The site already references those exact paths.
+
+### 2) Add or edit a team
+
+In `src/data/schedules.ts`, update the `teams` array:
+
+- `id`: unique stable key
+- `name`: label shown in selector tabs
+- `ageGroupLabel`: small descriptor
+- `seasonLabel`: season heading year
+
+You can add, remove, rename, or reorder teams without changing UI components.
+
+### 3) Add games
+
+Add entries to a team `games` array in `src/data/schedules.ts`.
+
+Each game supports:
+
+- `id`, `date`, `displayDate`, `time`
+- `opponent`, `homeAway`, `isRegionGame`
+- `venueName`, `address`, `city`, `state`, `zip`
+- `notes`, `status`, `score`, `mapUrl`
+
+### 4) Enter an away-game address
+
+For away games, fill:
+
+- `address`
+- `city`
+- `state`
+- `zip`
+
+If all are present, directions links are generated automatically.
+
+### 5) How Google Maps links are generated
+
+`src/lib/schedule-utils.ts` builds links using:
+
+`https://www.google.com/maps/search/?api=1&query=ENCODED_ADDRESS`
+
+If a game has `mapUrl`, that value is used directly.
+
+## Deploy to Vercel and connect the domain
+
+1. Push to GitHub.
+2. Import this repo in Vercel and deploy.
+3. In Vercel project settings, add custom domain `paysonfootball.com` (and `www` if desired).
+4. In Porkbun DNS, point the domain records to the Vercel values shown during domain setup.
+5. Wait for DNS propagation and verify SSL is active.

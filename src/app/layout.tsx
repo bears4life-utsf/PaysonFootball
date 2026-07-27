@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Source_Sans_3 } from "next/font/google";
+import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 
-const display = Barlow_Condensed({
+const display = Oswald({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["500", "600", "700"],
 });
 
-const body = Source_Sans_3({
+const body = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -16,11 +16,11 @@ const body = Source_Sans_3({
 
 export const metadata: Metadata = {
   title: {
-    default: "Payson Football",
-    template: "%s · Payson Football",
+    default: "Payson Lions Football",
+    template: "%s · Payson Lions Football",
   },
   description:
-    "Football schedules for every age group in Payson, Utah — games, times, and fields in one place.",
+    "Schedules and game-day information for every Payson Lions football team in Payson, Utah.",
   metadataBase: new URL("https://paysonfootball.com"),
 };
 

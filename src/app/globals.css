@@ -1,27 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f7f2;
-  --foreground: #142018;
-  --field: #1f4d2e;
-  --field-deep: #143620;
-  --turf: #2f6b3c;
-  --chalk: #e8efe4;
-  --accent: #c45c26;
-  --muted: #5a6b5e;
+  --background: #f3f4f4;
+  --foreground: #090a0a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-field: var(--field);
-  --color-field-deep: var(--field-deep);
-  --color-turf: var(--turf);
-  --color-chalk: var(--chalk);
-  --color-accent: var(--accent);
-  --color-muted: var(--muted);
   --font-sans: var(--font-body);
-  --font-display: var(--font-display);
 }
 
 body {
@@ -30,10 +17,10 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-@keyframes rise {
+@keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -41,28 +28,27 @@ body {
   }
 }
 
-@keyframes draw-line {
-  from {
-    transform: scaleX(0);
+.hero-rise {
+  animation: hero-rise 480ms ease-out both;
+}
+
+:focus-visible {
+  outline: 3px solid #075c35;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid #075c35;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
   }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.animate-rise {
-  animation: rise 0.7s ease-out both;
-}
-
-.animate-rise-delay {
-  animation: rise 0.7s ease-out 0.15s both;
-}
-
-.animate-rise-late {
-  animation: rise 0.7s ease-out 0.3s both;
-}
-
-.animate-yard-line {
-  transform-origin: left center;
-  animation: draw-line 0.9s ease-out 0.2s both;
 }
