@@ -22,6 +22,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Edit all teams and games in `src/data/schedules.ts`.
 
+Both **By Team** and **By Week** views read from this same file. Do not create a second weekly dataset.
+
+Shareable URL examples:
+
+- `/?view=team&team=varsity`
+- `/?view=week&week=2026-08-10`
+
+Week keys are the Monday date (`YYYY-MM-DD`) for that football week.
+
 ### 1) Add the Payson logo and hero image
 
 Put these files in `public/images`:
