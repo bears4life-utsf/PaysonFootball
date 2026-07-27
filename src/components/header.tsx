@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
 
 export function Header() {
+  const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
   const [compact, setCompact] = useState(false);
 
   useEffect(() => {
@@ -15,8 +18,31 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const syncHeight = () => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [compact]);
+
+  const scheduleActive = pathname === "/";
+  const teamsActive = pathname === "/teams";
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-50 border-b border-white/10 bg-black text-white"
+    >
       <div
         className={`mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 transition-[padding] duration-300 sm:px-6 ${
           compact ? "py-2" : "py-3"
@@ -30,18 +56,24 @@ export function Header() {
         </Link>
 
         <nav aria-label="Primary" className="flex items-center gap-4 sm:gap-6">
-          <a
-            href="#schedule"
-            className="focus-ring rounded text-sm font-medium text-white/85 transition hover:text-white"
+          <Link
+            href="/#schedule"
+            aria-current={scheduleActive ? "page" : undefined}
+            className={`focus-ring rounded text-sm font-medium transition ${
+              scheduleActive ? "text-white" : "text-white/85 hover:text-white"
+            }`}
           >
             Schedule
-          </a>
-          <a
-            href="#teams"
-            className="focus-ring rounded text-sm font-medium text-white/85 transition hover:text-white"
+          </Link>
+          <Link
+            href="/teams"
+            aria-current={teamsActive ? "page" : undefined}
+            className={`focus-ring rounded text-sm font-medium transition ${
+              teamsActive ? "text-white" : "text-white/85 hover:text-white"
+            }`}
           >
             Teams
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

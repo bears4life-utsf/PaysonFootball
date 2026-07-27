@@ -28,6 +28,8 @@ Shareable URL examples:
 
 - `/?view=team&team=varsity`
 - `/?view=week&week=2026-08-10`
+- `/teams` for team and coaching profiles
+- `/?view=team&team=jv#schedule` from a Teams “View Schedule” link
 
 Week keys are the Monday date (`YYYY-MM-DD`) for that football week.
 

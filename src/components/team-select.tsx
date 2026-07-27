@@ -10,7 +10,7 @@ type TeamSelectProps = {
 
 export function TeamSelect({ teams, selectedTeamId, onSelect }: TeamSelectProps) {
   return (
-    <div id="teams" className="w-full max-w-md">
+    <div className="w-full max-w-md">
       <label
         htmlFor="team-select"
         className="mb-2 block font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.16em] text-[#4f5854]"
