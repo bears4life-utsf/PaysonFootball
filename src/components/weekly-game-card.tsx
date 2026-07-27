@@ -1,6 +1,7 @@
 import { MapPin, Navigation } from "lucide-react";
 
 import { HomeAwayBadge, RegionBadge } from "@/components/game-badges";
+import { GameWeather } from "@/components/game-weather";
 import type { ScheduledGame } from "@/lib/schedule-filters";
 import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
@@ -53,6 +54,7 @@ export function WeeklyGameCard({ game, isNext = false, isPast = false }: WeeklyG
           </span>
         </p>
       </div>
+      <GameWeather game={game} variant="compact" className="mt-2" />
 
       {game.homeAway === "away" && mapLink ? (
         <a

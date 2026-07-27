@@ -1,4 +1,5 @@
 import { HomeAwayBadge, RegionBadge } from "@/components/game-badges";
+import { GameWeather } from "@/components/game-weather";
 import type { Game } from "@/data/schedules";
 import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
@@ -45,6 +46,7 @@ export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
                   <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[#090A0A]">
                     {formatMatchup(game)}
                   </p>
+                  <GameWeather game={game} variant="compact" className="mt-1" />
                 </td>
                 <td className="px-4 py-4">
                   {game.isRegionGame ? (

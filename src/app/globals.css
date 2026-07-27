@@ -36,22 +36,6 @@ body {
   animation: hero-rise 520ms ease-out both;
 }
 
-@keyframes hero-scroll-cue {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 0.85;
-    transform: translateY(5px);
-  }
-}
-
-.hero-scroll-cue {
-  animation: hero-scroll-cue 2.4s ease-in-out infinite;
-}
-
 .yard-lines {
   background-image: repeating-linear-gradient(
     90deg,

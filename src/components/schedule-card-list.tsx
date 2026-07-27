@@ -1,4 +1,5 @@
 import { HomeAwayBadge, RegionBadge } from "@/components/game-badges";
+import { GameWeather } from "@/components/game-weather";
 import type { Game } from "@/data/schedules";
 import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
@@ -46,6 +47,7 @@ export function ScheduleCardList({ games, nextGameId }: ScheduleCardListProps) {
                 {[game.address, game.city, game.state, game.zip].filter(Boolean).join(", ")}
               </p>
             ) : null}
+            <GameWeather game={game} variant="compact" className="mt-2" />
             {game.homeAway === "away" && mapLink ? (
               <a
                 href={mapLink}

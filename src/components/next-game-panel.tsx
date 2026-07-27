@@ -3,6 +3,7 @@ import { Navigation } from "lucide-react";
 import { AddToCalendarButton } from "@/components/add-to-calendar";
 import { HomeAwayBadge, RegionBadge } from "@/components/game-badges";
 import { GameCountdown } from "@/components/game-countdown";
+import { GameWeather } from "@/components/game-weather";
 import type { Game } from "@/data/schedules";
 import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
@@ -43,6 +44,10 @@ export function NextGamePanel({ game }: NextGamePanelProps) {
               <dd>{game.venueName}</dd>
             </div>
           </dl>
+
+          <div className="mt-5">
+            <GameWeather game={game} variant="detailed" />
+          </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             {game.homeAway === "away" && mapLink ? (

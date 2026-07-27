@@ -1,13 +1,9 @@
+import { knownVenues, type Venue } from "@/data/venues";
+
+export type { Venue };
+
 export type HomeAway = "home" | "away";
 export type GameStatus = "scheduled" | "final" | "postponed" | "canceled";
-
-export type Venue = {
-  name: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-};
 
 export type Game = {
   id: string;
@@ -37,6 +33,15 @@ export type Team = {
   games: Game[];
 };
 
+function venue(name: string): Venue {
+  const match = knownVenues.find((item) => item.name === name);
+  if (!match) {
+    // TODO: Add this venue to knownVenues with latitude/longitude.
+    return { name };
+  }
+  return match;
+}
+
 export const teams: Team[] = [
   {
     id: "varsity",
@@ -44,42 +49,12 @@ export const teams: Team[] = [
     ageGroupLabel: "High School",
     seasonLabel: "2026",
     venues: [
-      { name: "Payson", city: "Payson", state: "UT" },
-      {
-        name: "Juab High School",
-        address: "802 N 650 E",
-        city: "Nephi",
-        state: "UT",
-        zip: "84648",
-      },
-      {
-        name: "Maple Mountain High School",
-        address: "51 N Spanish Fork Parkway",
-        city: "Spanish Fork",
-        state: "UT",
-        zip: "84660",
-      },
-      {
-        name: "Springville High School",
-        address: "500 S Red Devil Drive",
-        city: "Springville",
-        state: "UT",
-        zip: "84663",
-      },
-      {
-        name: "Layton Christian Academy",
-        address: "2352 E Highway 193",
-        city: "Layton",
-        state: "UT",
-        zip: "84040",
-      },
-      {
-        name: "Pleasant Grove High School",
-        address: "700 E 200 S",
-        city: "Pleasant Grove",
-        state: "UT",
-        zip: "84062",
-      },
+      venue("Payson"),
+      venue("Juab High School"),
+      venue("Maple Mountain High School"),
+      venue("Springville High School"),
+      venue("Layton Christian Academy"),
+      venue("Pleasant Grove High School"),
     ],
     games: [
       {

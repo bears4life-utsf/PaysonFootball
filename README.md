@@ -81,6 +81,34 @@ If all are present, directions links are generated automatically.
 
 If a game has `mapUrl`, that value is used directly.
 
+### 6) Game-time weather (Open-Meteo)
+
+Weather uses [Open-Meteo](https://open-meteo.com/) because:
+
+- No API key is required for noncommercial use
+- Hourly forecasts include temperature, conditions, precipitation chance, and wind
+- Forecasts are available up to 16 days ahead
+
+Weather only appears when:
+
+- The game is upcoming
+- Kickoff time is known (not TBA)
+- The venue has `latitude` and `longitude`
+- The game falls inside the 16-day forecast window
+- Open-Meteo returns a valid hourly forecast
+
+Venue coordinates live in `src/data/venues.ts` (`knownVenues`).
+
+To add weather for a new venue:
+
+1. Add the venue to `knownVenues` with `latitude` and `longitude`
+2. Use that venue name on games via `venueName`
+3. Do not geocode addresses at runtime
+
+Weather codes are translated in `src/lib/weather-codes.ts`.
+
+The API route `/api/weather` fetches and normalizes forecasts. Responses are cached/revalidated about every 30 minutes (`revalidate = 1800`). Matching venue/date/time requests are also deduplicated in the browser.
+
 ## Deploy to Vercel and connect the domain
 
 1. Push to GitHub.

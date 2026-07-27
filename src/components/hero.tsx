@@ -1,4 +1,3 @@
-import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
 import { BrandLogo } from "@/components/brand-logo";
@@ -54,17 +53,6 @@ export function Hero() {
         <p className="motion-safe:hero-rise mt-3 max-w-md text-sm leading-relaxed text-[#F3F4F4]/90 sm:max-w-lg sm:text-base">
           Schedules and game-day information for every Payson Lions football team.
         </p>
-      </div>
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center"
-      >
-        <ChevronDown
-          size={22}
-          className="text-white/55 motion-safe:hero-scroll-cue"
-          strokeWidth={1.75}
-        />
       </div>
     </section>
   );

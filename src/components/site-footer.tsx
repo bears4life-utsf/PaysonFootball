@@ -16,6 +16,17 @@ export function SiteFooter() {
         <div className="text-sm text-[#C8CDD0] md:text-right">
           <p>© 2026 Payson Lions Football</p>
           <p>Schedules are subject to change.</p>
+          <p className="mt-1">
+            Weather data by{" "}
+            <a
+              href="https://open-meteo.com/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="focus-ring rounded underline underline-offset-2 hover:text-white"
+            >
+              Open-Meteo
+            </a>
+          </p>
         </div>
       </div>
     </footer>
