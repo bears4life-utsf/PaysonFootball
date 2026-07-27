@@ -4,7 +4,7 @@ import { BrandLogo } from "@/components/brand-logo";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#043D25] text-white">
+    <section className="relative overflow-hidden bg-black text-white">
       <div
         aria-hidden
         className="absolute inset-0 bg-cover bg-center"
@@ -12,7 +12,7 @@ export function Hero() {
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/65 to-[#090A0A]"
+        className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/75 to-black"
       />
 
       <div className="relative mx-auto flex min-h-[60vh] w-full max-w-6xl flex-col justify-center px-4 py-14 sm:px-6 sm:py-20">

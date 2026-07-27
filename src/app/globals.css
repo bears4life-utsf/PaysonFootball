@@ -3,6 +3,8 @@
 :root {
   --background: #f3f4f4;
   --foreground: #090a0a;
+  /* Exact match for the logo artwork background */
+  --brand-black: #000000;
 }
 
 @theme inline {

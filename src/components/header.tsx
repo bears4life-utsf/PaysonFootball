@@ -16,7 +16,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#090A0A]/95 text-white backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white">
       <div
         className={`mx-auto flex w-full max-w-6xl items-center justify-between px-4 transition-all sm:px-6 ${
           compact ? "py-2.5" : "py-4"

@@ -10,7 +10,7 @@ export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-sm border border-[#C8CDD0] md:block">
       <table className="w-full border-collapse">
-        <thead className="bg-[#090A0A] text-left text-xs uppercase tracking-wider text-white">
+        <thead className="bg-black text-left text-xs uppercase tracking-wider text-white">
           <tr>
             <th className="px-4 py-3">Date & Time</th>
             <th className="px-4 py-3">Home/Away</th>

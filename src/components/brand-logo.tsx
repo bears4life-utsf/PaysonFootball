@@ -6,10 +6,13 @@ type BrandLogoProps = {
   priority?: boolean;
 };
 
+/** Intrinsic logo ratio after crop: 456 x 564 */
+const ASPECT = 456 / 564;
+
 const sizeMap = {
-  sm: { className: "h-9 w-9", pixels: 36 },
-  md: { className: "h-12 w-12", pixels: 48 },
-  lg: { className: "h-16 w-16", pixels: 64 },
+  sm: { height: 36 },
+  md: { height: 52 },
+  lg: { height: 72 },
 } as const;
 
 export function BrandLogo({
@@ -17,16 +20,22 @@ export function BrandLogo({
   className = "",
   priority = false,
 }: BrandLogoProps) {
-  const { className: sizeClass, pixels } = sizeMap[size];
+  const height = sizeMap[size].height;
+  const width = Math.round(height * ASPECT);
 
   return (
-    <Image
-      src="/images/payson-lions-logo.png"
-      alt="Payson Lions logo"
-      width={pixels}
-      height={pixels}
-      className={`${sizeClass} object-contain ${className}`}
-      priority={priority}
-    />
+    <span
+      className={`inline-flex shrink-0 items-center justify-center bg-black ${className}`}
+      style={{ width, height, backgroundColor: "#000000" }}
+    >
+      <Image
+        src="/images/payson-lions-logo.png"
+        alt="Payson Lions logo"
+        width={width}
+        height={height}
+        className="h-full w-full object-contain"
+        priority={priority}
+      />
+    </span>
   );
 }
