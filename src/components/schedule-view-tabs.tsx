@@ -5,17 +5,17 @@ import type { KeyboardEvent } from "react";
 
 export type ScheduleViewMode = "team" | "week";
 
-type ScheduleViewToggleProps = {
+type ScheduleViewTabsProps = {
   view: ScheduleViewMode;
   onChange: (view: ScheduleViewMode) => void;
 };
 
 const OPTIONS: Array<{ id: ScheduleViewMode; label: string }> = [
-  { id: "team", label: "By Team" },
-  { id: "week", label: "By Week" },
+  { id: "team", label: "Team Schedule" },
+  { id: "week", label: "Weekly Schedule" },
 ];
 
-export function ScheduleViewToggle({ view, onChange }: ScheduleViewToggleProps) {
+export function ScheduleViewTabs({ view, onChange }: ScheduleViewTabsProps) {
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -31,7 +31,7 @@ export function ScheduleViewToggle({ view, onChange }: ScheduleViewToggleProps) 
     <div
       role="tablist"
       aria-label="Schedule view"
-      className="inline-flex w-full max-w-md rounded-full border border-[#C8CDD0] bg-white p-1 shadow-sm sm:w-auto"
+      className="flex w-full border-b border-[#D5D9DA]"
     >
       {OPTIONS.map((option, index) => {
         const active = option.id === view;
@@ -49,10 +49,10 @@ export function ScheduleViewToggle({ view, onChange }: ScheduleViewToggleProps) 
             tabIndex={active ? 0 : -1}
             onKeyDown={(event) => onKeyDown(event, index)}
             onClick={() => onChange(option.id)}
-            className={`focus-ring min-h-11 flex-1 rounded-full px-5 py-2 font-[family-name:var(--font-display)] text-sm uppercase tracking-wide transition sm:flex-none ${
+            className={`focus-ring min-h-11 flex-1 px-3 py-3 font-[family-name:var(--font-display)] text-sm uppercase tracking-wide transition sm:flex-none sm:px-5 ${
               active
-                ? "bg-[#075C35] text-white shadow-[0_6px_16px_rgba(7,92,53,0.25)]"
-                : "text-[#090A0A] hover:bg-[#F3F4F4]"
+                ? "border-b-2 border-[#075C35] text-[#075C35]"
+                : "border-b-2 border-transparent text-[#4f5854] hover:text-[#090A0A]"
             }`}
           >
             {option.label}
@@ -62,3 +62,6 @@ export function ScheduleViewToggle({ view, onChange }: ScheduleViewToggleProps) 
     </div>
   );
 }
+
+/** @deprecated Prefer ScheduleViewTabs */
+export const ScheduleViewToggle = ScheduleViewTabs;

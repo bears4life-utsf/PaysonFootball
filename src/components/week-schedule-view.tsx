@@ -44,26 +44,24 @@ export function WeekScheduleView({
   const rangeLabel = formatWeekRange(getWeekMonday(weekKey));
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <WeekNavigator
         weekKey={weekKey}
-        weeksWithGames={weeksWithGames}
         onPrevious={() => onShiftWeek(-1)}
         onNext={() => onShiftWeek(1)}
         onThisWeek={onThisWeek}
-        onSelectWeek={onWeekChange}
       />
 
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#E5E7E7] pb-4">
+      <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <p className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.18em] text-[#075C35]">
+          <p className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.16em] text-[#4f5854]">
             {weekLabel}
           </p>
-          <h3 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-[#090A0A] sm:text-4xl">
+          <h3 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-[#090A0A]">
             {rangeLabel}
           </h3>
         </div>
-        <p className="text-sm font-semibold text-[#4f5854]">
+        <p className="text-sm text-[#4f5854]">
           {weekGames.length} scheduled {weekGames.length === 1 ? "game" : "games"}
         </p>
       </div>
@@ -78,7 +76,7 @@ export function WeekScheduleView({
           hasNextScheduled={Boolean(nextScheduledWeekKey)}
         />
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-7">
           {days.map((day) => (
             <section key={day.date} aria-labelledby={`day-${day.date}`}>
               <h4

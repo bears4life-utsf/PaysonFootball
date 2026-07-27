@@ -26,7 +26,7 @@ export function ScheduleCardList({ games, nextGameId }: ScheduleCardListProps) {
               </p>
               <span className="text-sm font-medium text-[#4f5854]">{game.time}</span>
               {isNext ? (
-                <span className="rounded-full bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                <span className="rounded bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
                   Next
                 </span>
               ) : null}

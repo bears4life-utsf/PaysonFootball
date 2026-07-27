@@ -64,7 +64,7 @@ export function ScheduleTable({ games, nextGameId }: ScheduleTableProps) {
                 <td className="px-4 py-4">
                   <div className="flex flex-wrap items-center gap-2">
                     {isNext ? (
-                      <span className="rounded-full bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                      <span className="rounded bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
                         Next
                       </span>
                     ) : null}

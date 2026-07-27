@@ -1,9 +1,8 @@
-import { CalendarDays, Clock3, MapPin, Navigation } from "lucide-react";
+import { Navigation } from "lucide-react";
 
 import { AddToCalendarButton } from "@/components/add-to-calendar";
 import { HomeAwayBadge, RegionBadge } from "@/components/game-badges";
 import { GameCountdown } from "@/components/game-countdown";
-import { GameWeather } from "@/components/game-weather";
 import type { Game } from "@/data/schedules";
 import { buildMapLink, formatMatchup } from "@/lib/schedule-utils";
 
@@ -15,9 +14,8 @@ export function NextGamePanel({ game }: NextGamePanelProps) {
   const mapLink = buildMapLink(game);
 
   return (
-    <section className="overflow-hidden rounded-lg border border-[#075C35]/25 bg-white shadow-[0_10px_30px_rgba(9,10,10,0.08)]">
-      <div className="h-1.5 bg-[#075C35]" />
-      <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1.4fr_0.9fr]">
+    <section className="rounded border border-[#075C35]/20 bg-white p-5 shadow-[0_8px_24px_rgba(9,10,10,0.06)] sm:p-6">
+      <div className="grid gap-6 lg:grid-cols-[1.35fr_0.85fr] lg:items-start">
         <div>
           <p className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.2em] text-[#075C35]">
             Next Game
@@ -26,25 +24,25 @@ export function NextGamePanel({ game }: NextGamePanelProps) {
             {formatMatchup(game)}
           </h3>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <HomeAwayBadge homeAway={game.homeAway} />
             {game.isRegionGame ? <RegionBadge /> : null}
           </div>
 
-          <div className="mt-5 grid gap-3 text-sm text-[#1e2522] sm:grid-cols-3">
-            <p className="flex items-center gap-2 rounded-md bg-[#F3F4F4] px-3 py-2.5">
-              <CalendarDays size={17} className="shrink-0 text-[#075C35]" aria-hidden />
-              <span className="font-semibold">{game.displayDate}</span>
-            </p>
-            <p className="flex items-center gap-2 rounded-md bg-[#F3F4F4] px-3 py-2.5">
-              <Clock3 size={17} className="shrink-0 text-[#075C35]" aria-hidden />
-              <span className="font-semibold">{game.time}</span>
-            </p>
-            <p className="flex items-center gap-2 rounded-md bg-[#F3F4F4] px-3 py-2.5">
-              <MapPin size={17} className="shrink-0 text-[#075C35]" aria-hidden />
-              <span className="font-semibold">{game.venueName}</span>
-            </p>
-          </div>
+          <dl className="mt-5 space-y-2 text-sm text-[#1e2522]">
+            <div className="flex gap-3">
+              <dt className="w-16 font-semibold text-[#4f5854]">Date</dt>
+              <dd>{game.displayDate}</dd>
+            </div>
+            <div className="flex gap-3">
+              <dt className="w-16 font-semibold text-[#4f5854]">Time</dt>
+              <dd>{game.time}</dd>
+            </div>
+            <div className="flex gap-3">
+              <dt className="w-16 font-semibold text-[#4f5854]">Venue</dt>
+              <dd>{game.venueName}</dd>
+            </div>
+          </dl>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             {game.homeAway === "away" && mapLink ? (
@@ -52,7 +50,7 @@ export function NextGamePanel({ game }: NextGamePanelProps) {
                 href={mapLink}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-black px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
+                className="focus-ring inline-flex min-h-11 items-center gap-2 rounded bg-black px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#1a1a1a]"
               >
                 <Navigation size={15} aria-hidden />
                 Directions
@@ -62,10 +60,7 @@ export function NextGamePanel({ game }: NextGamePanelProps) {
           </div>
         </div>
 
-        <div className="grid gap-3 content-start">
-          <GameCountdown game={game} />
-          <GameWeather />
-        </div>
+        <GameCountdown game={game} />
       </div>
     </section>
   );

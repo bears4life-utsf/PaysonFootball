@@ -22,11 +22,11 @@ export function GameCountdown({ game }: GameCountdownProps) {
 
   if (parts.isLiveOrPast) {
     return (
-      <div className="rounded-md border border-[#075C35]/20 bg-[#075C35]/5 px-4 py-3">
+      <div className="border-l border-[#075C35]/30 pl-4 sm:pl-6">
         <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-[#075C35]">
           Kickoff
         </p>
-        <p className="mt-1 font-[family-name:var(--font-display)] text-2xl uppercase text-[#090A0A]">
+        <p className="mt-2 font-[family-name:var(--font-display)] text-3xl uppercase text-[#090A0A]">
           Game Day
         </p>
       </div>
@@ -40,17 +40,17 @@ export function GameCountdown({ game }: GameCountdownProps) {
   ];
 
   return (
-    <div className="rounded-md border border-[#075C35]/20 bg-[#075C35]/5 px-4 py-3">
+    <div className="border-l border-[#075C35]/30 pl-4 sm:pl-6">
       <p className="font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.18em] text-[#075C35]">
-        Countdown to Kickoff
+        Countdown
       </p>
-      <div className="mt-3 grid grid-cols-3 gap-2">
+      <div className="mt-3 flex gap-5 sm:gap-6">
         {blocks.map((block) => (
-          <div key={block.label} className="rounded-md bg-white px-2 py-2 text-center shadow-sm">
-            <p className="font-[family-name:var(--font-display)] text-2xl font-semibold tabular-nums text-[#090A0A] sm:text-3xl">
+          <div key={block.label}>
+            <p className="font-[family-name:var(--font-display)] text-3xl font-semibold tabular-nums leading-none text-[#090A0A] sm:text-4xl">
               {block.value}
             </p>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-[#5a6660]">
+            <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#5a6660]">
               {block.label}
             </p>
           </div>

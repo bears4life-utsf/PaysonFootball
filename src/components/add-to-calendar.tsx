@@ -61,7 +61,7 @@ export function AddToCalendarButton({ game }: AddToCalendarButtonProps) {
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
-        className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md border border-black/80 bg-white px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-black transition hover:-translate-y-0.5 hover:bg-[#F3F4F4]"
+        className="focus-ring inline-flex min-h-11 items-center gap-2 rounded border border-black/80 bg-white px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-black transition hover:bg-[#F3F4F4]"
       >
         <CalendarPlus size={16} aria-hidden />
         Add to Calendar

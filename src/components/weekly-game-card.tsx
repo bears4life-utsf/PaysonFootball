@@ -24,13 +24,13 @@ export function WeeklyGameCard({ game, isNext = false, isPast = false }: WeeklyG
       }`}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-black px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
+        <span className="rounded bg-black px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
           {game.teamName}
         </span>
         <HomeAwayBadge homeAway={game.homeAway} />
         {game.isRegionGame ? <RegionBadge /> : null}
         {isNext ? (
-          <span className="rounded-full bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
+          <span className="rounded bg-[#075C35] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white">
             Next Payson Game
           </span>
         ) : null}

@@ -8,11 +8,11 @@ import { EmptyScheduleState } from "@/components/empty-schedule-state";
 import { NextGamePanel } from "@/components/next-game-panel";
 import { ScheduleCardList } from "@/components/schedule-card-list";
 import {
-  ScheduleViewToggle,
+  ScheduleViewTabs,
   type ScheduleViewMode,
-} from "@/components/schedule-view-toggle";
+} from "@/components/schedule-view-tabs";
 import { ScheduleTable } from "@/components/schedule-table";
-import { TeamSelector } from "@/components/team-selector";
+import { TeamSelect } from "@/components/team-select";
 import { WeekScheduleView } from "@/components/week-schedule-view";
 import { teams, type Team } from "@/data/schedules";
 import { flattenScheduledGames } from "@/lib/schedule-filters";
@@ -88,7 +88,6 @@ export function ScheduleSection() {
               ? params.get("week")!
               : defaultWeekKey;
         params.set("week", nextWeek);
-        // Keep team param out of week URLs for clean sharing.
         params.delete("team");
       }
 
@@ -100,22 +99,28 @@ export function ScheduleSection() {
 
   return (
     <section id="schedule" className="relative w-full">
-      <div className="mx-auto w-full max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12">
-        <div className="max-w-3xl">
-          <h2 className="font-[family-name:var(--font-display)] text-4xl uppercase tracking-tight text-[#090A0A] sm:text-5xl">
-            Schedule
-          </h2>
-          <p className="mt-3 text-[#313a36]">
-            Browse Payson Lions games by team or by week.
-          </p>
-        </div>
+      <div className="mx-auto w-full max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10">
+        <h2 className="font-[family-name:var(--font-display)] text-4xl uppercase tracking-tight text-[#090A0A] sm:text-5xl">
+          Schedule
+        </h2>
 
-        <div className="mt-6">
-          <ScheduleViewToggle
+        <div className="mt-5">
+          <ScheduleViewTabs
             view={view}
             onChange={(nextView) => updateParams({ view: nextView })}
           />
         </div>
+
+        {view === "team" ? (
+          <div className="mt-6">
+            {/* Future “My Teams” multi-select can replace/extend TeamSelect here. */}
+            <TeamSelect
+              teams={teams}
+              selectedTeamId={selectedTeamId}
+              onSelect={(teamId) => updateParams({ view: "team", team: teamId })}
+            />
+          </div>
+        ) : null}
       </div>
 
       {view === "team" ? (
@@ -123,64 +128,43 @@ export function ScheduleSection() {
           role="tabpanel"
           id="schedule-panel-team"
           aria-labelledby="schedule-view-team"
+          className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6"
         >
-          {/* Future “My Teams” multi-select can replace/extend TeamSelector here
-              and pass multiple IDs into flattenScheduledGames / filterScheduledGames. */}
-          <TeamSelector
-            teams={teams}
-            selectedTeamId={selectedTeamId}
-            onSelect={(teamId) => updateParams({ view: "team", team: teamId })}
-          />
+          <div>
+            <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-[#090A0A] sm:text-4xl">
+              {selectedTeam.seasonLabel} {selectedTeam.name} Schedule
+            </h3>
+            <p className="mt-2 text-sm text-[#4f5854]">
+              <span className="font-semibold text-[#090A0A]">REGION</span> marks region games.
+            </p>
+          </div>
 
-          <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-            <div
-              role="tabpanel"
-              id={`team-panel-${selectedTeam.id}`}
-              aria-labelledby={`team-tab-${selectedTeam.id}`}
-            >
-              <div className="max-w-3xl">
-                <h3 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-[#090A0A] sm:text-4xl">
-                  {selectedTeam.seasonLabel} {selectedTeam.name} Schedule
-                </h3>
-                <p className="mt-3 text-[#313a36]">
-                  Schedules and game-day details for players, parents, coaches, and fans.
-                </p>
-                <div className="mt-4 flex items-center gap-2 text-sm text-[#4f5854]">
-                  <span className="rounded-full border border-[#C8CDD0] bg-white px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-[#090A0A]">
-                    REGION
-                  </span>
-                  Region badge marks region games.
-                </div>
-              </div>
+          <div className="mt-6 space-y-5">
+            {selectedTeam.games.length === 0 ? (
+              <EmptyScheduleState teamName={selectedTeam.name} />
+            ) : (
+              <>
+                {seasonState === "complete" ? (
+                  <section className="rounded border border-[#C8CDD0] bg-white p-5 sm:p-6">
+                    <h4 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[#090A0A]">
+                      Season Complete
+                    </h4>
+                    <p className="mt-2 text-[#4f5854]">
+                      The season has ended. The full schedule remains available below.
+                    </p>
+                  </section>
+                ) : nextGame ? (
+                  <NextGamePanel game={nextGame} />
+                ) : null}
 
-              <div className="mt-8 space-y-5">
-                {selectedTeam.games.length === 0 ? (
-                  <EmptyScheduleState teamName={selectedTeam.name} />
-                ) : (
-                  <>
-                    {seasonState === "complete" ? (
-                      <section className="rounded-lg border border-[#C8CDD0] bg-white p-5 shadow-sm sm:p-6">
-                        <h4 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[#090A0A]">
-                          Season Complete
-                        </h4>
-                        <p className="mt-2 text-[#4f5854]">
-                          The season has ended. The full schedule remains available below.
-                        </p>
-                      </section>
-                    ) : nextGame ? (
-                      <NextGamePanel game={nextGame} />
-                    ) : null}
-
-                    <ScheduleTable games={selectedTeam.games} nextGameId={nextGame?.id} />
-                    <ScheduleCardList
-                      games={selectedTeam.games}
-                      nextGameId={nextGame?.id}
-                    />
-                    <AwayVenueList venues={awayVenues} />
-                  </>
-                )}
-              </div>
-            </div>
+                <ScheduleTable games={selectedTeam.games} nextGameId={nextGame?.id} />
+                <ScheduleCardList
+                  games={selectedTeam.games}
+                  nextGameId={nextGame?.id}
+                />
+                <AwayVenueList venues={awayVenues} />
+              </>
+            )}
           </div>
         </div>
       ) : (
@@ -188,7 +172,7 @@ export function ScheduleSection() {
           role="tabpanel"
           id="schedule-panel-week"
           aria-labelledby="schedule-view-week"
-          className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10"
+          className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6"
         >
           <WeekScheduleView
             games={allGames}

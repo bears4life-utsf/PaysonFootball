@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 type BrandLogoProps = {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   priority?: boolean;
 };
@@ -13,6 +13,7 @@ const sizeMap = {
   sm: { height: 36 },
   md: { height: 52 },
   lg: { height: 72 },
+  xl: { height: 88 },
 } as const;
 
 export function BrandLogo({
