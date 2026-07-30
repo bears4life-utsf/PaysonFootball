@@ -106,32 +106,33 @@ export default async function AdminWaiversPage({ searchParams }: PageProps) {
                 </tr>
               </thead>
               <tbody>
-                {waivers.map((waiver) => (
-                  <tr key={waiver.pathname} className="border-b border-[#E8EAEB]">
-                    <td className="px-4 py-3 capitalize text-[#090A0A]">
-                      {waiver.participantName || "—"}
-                    </td>
-                    <td className="px-4 py-3 capitalize text-[#313a36]">
-                      {waiver.parentName || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-[#313a36]">
-                      {waiver.date || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-[#313a36]">
-                      {new Date(waiver.uploadedAt).toLocaleString()}
-                    </td>
-                    <td className="px-4 py-3">
-                      <a
-                        href={waiver.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                {waivers.map((waiver) => {
+                  const downloadHref = `/api/waivers/file?pathname=${encodeURIComponent(waiver.pathname)}&token=${encodeURIComponent(token ?? "")}`;
+                  return (
+                    <tr key={waiver.pathname} className="border-b border-[#E8EAEB]">
+                      <td className="px-4 py-3 capitalize text-[#090A0A]">
+                        {waiver.participantName || "—"}
+                      </td>
+                      <td className="px-4 py-3 capitalize text-[#313a36]">
+                        {waiver.parentName || "—"}
+                      </td>
+                      <td className="px-4 py-3 text-[#313a36]">
+                        {waiver.date || "—"}
+                      </td>
+                      <td className="px-4 py-3 text-[#313a36]">
+                        {new Date(waiver.uploadedAt).toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3">
+                        <a
+                          href={downloadHref}
+                          className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
+                        >
+                          Download
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -1,4 +1,4 @@
-import { list } from "@vercel/blob";
+import { get, list } from "@vercel/blob";
 import JSZip from "jszip";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,6 +9,19 @@ import {
 } from "@/lib/waiver";
 
 export const runtime = "nodejs";
+
+async function streamToBuffer(stream: ReadableStream<Uint8Array>) {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) chunks.push(value);
+  }
+
+  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
+}
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
@@ -29,9 +42,9 @@ export async function GET(request: NextRequest) {
 
       for (const blob of result.blobs) {
         if (!blob.pathname.toLowerCase().endsWith(".pdf")) continue;
-        const response = await fetch(blob.url);
-        if (!response.ok) continue;
-        const bytes = await response.arrayBuffer();
+        const file = await get(blob.pathname, { access: "private" });
+        if (!file || file.statusCode !== 200 || !file.stream) continue;
+        const bytes = await streamToBuffer(file.stream);
         const filename = blob.pathname.split("/").pop() ?? blob.pathname;
         zip.file(filename, bytes);
       }

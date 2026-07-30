@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     });
 
     const blob = await put(pathname, Buffer.from(pdfBytes), {
-      access: "public",
+      access: "private",
       contentType: "application/pdf",
       addRandomSuffix: false,
     });
