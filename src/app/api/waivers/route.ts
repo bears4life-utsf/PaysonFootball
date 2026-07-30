@@ -6,8 +6,8 @@ import { NextResponse } from "next/server";
 import {
   assertBlobConfigured,
   buildWaiverPathname,
-  isLikelySigned,
-  stampWaiverPdf,
+  isLikelySignedImage,
+  signedImageToPdf,
   type WaiverSubmission,
 } from "@/lib/waiver";
 
@@ -24,8 +24,7 @@ function isSubmission(body: unknown): body is WaiverSubmission {
     typeof value.parentName === "string" &&
     typeof value.date === "string" &&
     typeof value.participantName === "string" &&
-    typeof value.udotSignaturePng === "string" &&
-    typeof value.citySignaturePng === "string"
+    typeof value.signedImagePng === "string"
   );
 }
 
@@ -54,23 +53,14 @@ export async function POST(request: Request) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return badRequest("Date must be YYYY-MM-DD.");
   }
-  if (!isLikelySigned(body.udotSignaturePng)) {
-    return badRequest("UDOT signature is required.");
-  }
-  if (!isLikelySigned(body.citySignaturePng)) {
-    return badRequest("Santaquin City signature is required.");
+  if (!isLikelySignedImage(body.signedImagePng)) {
+    return badRequest("Signed waiver image is required.");
   }
 
   try {
     assertBlobConfigured();
 
-    const pdfBytes = await stampWaiverPdf({
-      parentName,
-      participantName,
-      date,
-      udotSignaturePng: body.udotSignaturePng,
-      citySignaturePng: body.citySignaturePng,
-    });
+    const pdfBytes = await signedImageToPdf(body.signedImagePng);
 
     const pathname = buildWaiverPathname({
       date,
