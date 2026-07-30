@@ -153,7 +153,7 @@ export function ParadeWaiverForm() {
             Review the document, then complete the form below.
           </p>
         </div>
-        <div className="max-h-[45vh] overflow-auto bg-[#E8EAEB]">
+        <div className="bg-[#E8EAEB]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={WAIVER_PREVIEW_PUBLIC_PATH}
