@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import type { WaiverListItem } from "@/lib/waiver";
 
 const UTAH_TIME_ZONE = "America/Denver";
+/** Flip to true to show Delete selected in the admin toolbar. */
+const SHOW_DELETE_BUTTON = false;
 
 type SortKey = "name" | "date";
 type SortDir = "asc" | "desc";
@@ -224,14 +226,16 @@ export function AdminWaiversTable({ waivers, token }: AdminWaiversTableProps) {
           >
             {busy === "zip" ? "Zipping…" : "Zip selected"}
           </button>
-          <button
-            type="button"
-            onClick={runDelete}
-            disabled={selectedCount === 0 || busy !== null}
-            className="focus-ring rounded border border-red-700 px-3 py-2 text-sm font-semibold text-red-700 enabled:hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {busy === "delete" ? "Deleting…" : "Delete selected"}
-          </button>
+          {SHOW_DELETE_BUTTON ? (
+            <button
+              type="button"
+              onClick={runDelete}
+              disabled={selectedCount === 0 || busy !== null}
+              className="focus-ring rounded border border-red-700 px-3 py-2 text-sm font-semibold text-red-700 enabled:hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {busy === "delete" ? "Deleting…" : "Delete selected"}
+            </button>
+          ) : null}
         </div>
       </div>
 
