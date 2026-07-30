@@ -72,7 +72,7 @@ export function Header() {
               waiverActive ? "text-white" : "text-white/85 hover:text-white"
             }`}
           >
-            Parade Waiver
+            Waiver
           </Link>
         </nav>
       </div>
