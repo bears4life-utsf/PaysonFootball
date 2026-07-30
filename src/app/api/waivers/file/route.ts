@@ -29,11 +29,12 @@ export async function GET(request: NextRequest) {
     }
 
     const filename = pathname.split("/").pop() ?? "waiver.pdf";
+    const viewInline = request.nextUrl.searchParams.get("view") === "1";
 
     return new NextResponse(result.stream, {
       headers: {
         "Content-Type": result.blob.contentType || "application/pdf",
-        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Content-Disposition": `${viewInline ? "inline" : "attachment"}; filename="${filename}"`,
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
       },

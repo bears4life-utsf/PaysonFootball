@@ -107,7 +107,9 @@ export default async function AdminWaiversPage({ searchParams }: PageProps) {
               </thead>
               <tbody>
                 {waivers.map((waiver) => {
-                  const downloadHref = `/api/waivers/file?pathname=${encodeURIComponent(waiver.pathname)}&token=${encodeURIComponent(token ?? "")}`;
+                  const fileQuery = `pathname=${encodeURIComponent(waiver.pathname)}&token=${encodeURIComponent(token ?? "")}`;
+                  const downloadHref = `/api/waivers/file?${fileQuery}`;
+                  const viewHref = `/api/waivers/file?${fileQuery}&view=1`;
                   return (
                     <tr key={waiver.pathname} className="border-b border-[#E8EAEB]">
                       <td className="px-4 py-3 capitalize text-[#090A0A]">
@@ -123,12 +125,22 @@ export default async function AdminWaiversPage({ searchParams }: PageProps) {
                         {new Date(waiver.uploadedAt).toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
-                        <a
-                          href={downloadHref}
-                          className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
-                        >
-                          Download
-                        </a>
+                        <div className="flex items-center gap-3">
+                          <a
+                            href={viewHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
+                          >
+                            View
+                          </a>
+                          <a
+                            href={downloadHref}
+                            className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
+                          >
+                            Download
+                          </a>
+                        </div>
                       </td>
                     </tr>
                   );
