@@ -180,7 +180,7 @@ export function ParadeWaiverForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block space-y-1.5 sm:col-span-2">
             <span className="text-sm font-medium text-[#090A0A]">
-              Name of Participant or Parent/Guardian
+              Name of Parent/Guardian
             </span>
             <input
               required
@@ -222,7 +222,7 @@ export function ParadeWaiverForm() {
                 UDOT Waiver
               </p>
               <p className="text-sm font-medium text-[#090A0A]">
-                Signature of participant or parent/guardian of minor
+                Signature of Parent/Guardian
               </p>
             </div>
             <button
@@ -251,7 +251,7 @@ export function ParadeWaiverForm() {
                 Santaquin City Waiver
               </p>
               <p className="text-sm font-medium text-[#090A0A]">
-                Signature of participant or parent/guardian of minor
+                Signature of Parent/Guardian
               </p>
             </div>
             <button
