@@ -37,6 +37,7 @@ export function Header() {
 
   const scheduleActive = pathname === "/";
   const teamsActive = pathname === "/teams";
+  const waiverActive = pathname === "/parade-waiver";
 
   return (
     <header
@@ -55,7 +56,7 @@ export function Header() {
           </p>
         </Link>
 
-        <nav aria-label="Primary" className="flex items-center gap-4 sm:gap-6">
+        <nav aria-label="Primary" className="flex items-center gap-3 sm:gap-6">
           <Link
             href="/#schedule"
             aria-current={scheduleActive ? "page" : undefined}
@@ -73,6 +74,15 @@ export function Header() {
             }`}
           >
             Teams
+          </Link>
+          <Link
+            href="/parade-waiver"
+            aria-current={waiverActive ? "page" : undefined}
+            className={`focus-ring rounded text-sm font-medium transition ${
+              waiverActive ? "text-white" : "text-white/85 hover:text-white"
+            }`}
+          >
+            Waiver
           </Link>
         </nav>
       </div>

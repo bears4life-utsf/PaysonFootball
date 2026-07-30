@@ -111,6 +111,37 @@ Weather codes are translated in `src/lib/weather-codes.ts`.
 
 The API route `/api/weather` fetches and normalizes forecasts. Responses are cached/revalidated about every 30 minutes (`revalidate = 1800`). Matching venue/date/time requests are also deduplicated in the browser.
 
+## Parade waiver
+
+Parents sign the Santaquin Orchard Days parade waiver at `/parade-waiver` (also linked as **Waiver** in the header).
+
+Signed PDFs are stored in [Vercel Blob](https://vercel.com/docs/storage/vercel-blob). Staff export them from a secret admin URL.
+
+### Setup
+
+1. In the Vercel project, create a **Blob** store and copy the `BLOB_READ_WRITE_TOKEN`.
+2. Create a long random admin secret for `WAIVER_ADMIN_TOKEN` (for example `openssl rand -hex 32`).
+3. Add both to `.env.local` for local development and to Vercel project env vars for production:
+
+```bash
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
+WAIVER_ADMIN_TOKEN=your-long-random-secret
+```
+
+4. Restart `npm run dev` after changing env vars.
+5. Open the admin list at:
+
+`/admin/waivers?token=YOUR_WAIVER_ADMIN_TOKEN`
+
+From there you can download individual PDFs or **Download all (ZIP)**.
+
+### Files
+
+- Blank template: `public/waivers/parade-waiver-2026.pdf`
+- Signing page: `/parade-waiver`
+- Submit API: `POST /api/waivers`
+- Admin export API: `GET /api/waivers/export?token=...`
+
 ## Deploy to Vercel and connect the domain
 
 1. Push to GitHub.
