@@ -45,14 +45,15 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export function AdminWaiversTable({ waivers, token }: AdminWaiversTableProps) {
+  const [rows, setRows] = useState(waivers);
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
-  const [busy, setBusy] = useState<"zip" | "pdf" | null>(null);
+  const [busy, setBusy] = useState<"zip" | "pdf" | "delete" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const sorted = useMemo(() => {
-    const items = [...waivers];
+    const items = [...rows];
     const direction = sortDir === "asc" ? 1 : -1;
     items.sort((a, b) => {
       if (sortKey === "name") {
@@ -69,7 +70,7 @@ export function AdminWaiversTable({ waivers, token }: AdminWaiversTableProps) {
       }) * direction;
     });
     return items;
-  }, [waivers, sortKey, sortDir]);
+  }, [rows, sortKey, sortDir]);
 
   const allSelected =
     sorted.length > 0 && sorted.every((waiver) => selected.has(waiver.pathname));
@@ -149,10 +150,56 @@ export function AdminWaiversTable({ waivers, token }: AdminWaiversTableProps) {
     }
   }
 
+  async function runDelete() {
+    if (selectedCount === 0) {
+      setError("Select at least one waiver.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete ${selectedCount} selected waiver${selectedCount === 1 ? "" : "s"}? This cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setBusy("delete");
+    setError(null);
+
+    try {
+      const pathnames = sorted
+        .map((waiver) => waiver.pathname)
+        .filter((pathname) => selected.has(pathname));
+
+      const response = await fetch("/api/waivers/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, pathnames }),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(payload?.error ?? "Could not delete waivers.");
+      }
+
+      const deleted = new Set(pathnames);
+      setRows((current) => current.filter((row) => !deleted.has(row.pathname)));
+      setSelected(new Set());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const sortLabel = (key: SortKey) => {
     if (sortKey !== key) return "";
     return sortDir === "asc" ? " ↑" : " ↓";
   };
+
+  if (rows.length === 0) {
+    return <p className="text-[#313a36]">No signed waivers yet.</p>;
+  }
 
   return (
     <div className="space-y-4">
@@ -176,6 +223,14 @@ export function AdminWaiversTable({ waivers, token }: AdminWaiversTableProps) {
             className="focus-ring rounded border border-[#075C35] px-3 py-2 text-sm font-semibold text-[#075C35] enabled:hover:bg-[#075C35]/10 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy === "zip" ? "Zipping…" : "Zip selected"}
+          </button>
+          <button
+            type="button"
+            onClick={runDelete}
+            disabled={selectedCount === 0 || busy !== null}
+            className="focus-ring rounded border border-red-700 px-3 py-2 text-sm font-semibold text-red-700 enabled:hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {busy === "delete" ? "Deleting…" : "Delete selected"}
           </button>
         </div>
       </div>
