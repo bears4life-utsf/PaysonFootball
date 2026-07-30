@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import { Header } from "@/components/header";
+import { ParadeWaiverForm } from "@/components/parade-waiver-form";
 import { SiteFooter } from "@/components/site-footer";
-import { WaiverSigner } from "@/components/waiver-signer";
 
 export const metadata: Metadata = {
   title: "Parade Waiver",
@@ -24,14 +24,14 @@ export default function ParadeWaiverPage() {
               Parade Waiver
             </h1>
             <p className="mt-3 max-w-2xl text-base text-white/85 sm:text-lg">
-              Fill in the lines and sign both signature areas directly on the
-              waiver, then submit.
+              Read the waiver, fill out the form, and sign. We generate the
+              official PDF for you.
             </p>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-6xl py-8 sm:px-6 sm:py-10">
-          <WaiverSigner />
+        <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+          <ParadeWaiverForm />
         </section>
       </main>
       <SiteFooter />
