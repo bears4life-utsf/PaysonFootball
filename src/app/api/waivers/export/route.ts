@@ -1,64 +1,67 @@
-import { get, list } from "@vercel/blob";
 import JSZip from "jszip";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import {
-  WAIVER_BLOB_PREFIX,
-  assertBlobConfigured,
-  verifyAdminToken,
-} from "@/lib/waiver";
+  loadWaiverPdfBytes,
+  sanitizeWaiverPathnames,
+} from "@/lib/waiver-export";
+import { assertBlobConfigured, verifyAdminToken } from "@/lib/waiver";
 
 export const runtime = "nodejs";
 
-async function streamToBuffer(stream: ReadableStream<Uint8Array>) {
-  const reader = stream.getReader();
-  const chunks: Uint8Array[] = [];
+type Body = {
+  token?: string;
+  pathnames?: unknown;
+};
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (value) chunks.push(value);
+async function parseBody(request: Request): Promise<Body> {
+  try {
+    return (await request.json()) as Body;
+  } catch {
+    return {};
   }
-
-  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
 }
 
-export async function GET(request: NextRequest) {
-  const token = request.nextUrl.searchParams.get("token");
-  if (!verifyAdminToken(token)) {
+function utahStamp() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Denver",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+export async function POST(request: Request) {
+  const body = await parseBody(request);
+  if (!verifyAdminToken(body.token)) {
     return new NextResponse("Not found", { status: 404 });
+  }
+
+  const pathnames = sanitizeWaiverPathnames(body.pathnames);
+  if (pathnames.length === 0) {
+    return NextResponse.json(
+      { error: "Select at least one waiver." },
+      { status: 400 },
+    );
   }
 
   try {
     assertBlobConfigured();
     const zip = new JSZip();
-    let cursor: string | undefined;
 
-    do {
-      const result = await list({
-        prefix: WAIVER_BLOB_PREFIX,
-        cursor,
-      });
-
-      for (const blob of result.blobs) {
-        if (!blob.pathname.toLowerCase().endsWith(".pdf")) continue;
-        const file = await get(blob.pathname, { access: "private" });
-        if (!file || file.statusCode !== 200 || !file.stream) continue;
-        const bytes = await streamToBuffer(file.stream);
-        const filename = blob.pathname.split("/").pop() ?? blob.pathname;
-        zip.file(filename, bytes);
-      }
-
-      cursor = result.hasMore ? result.cursor : undefined;
-    } while (cursor);
+    for (const pathname of pathnames) {
+      const bytes = await loadWaiverPdfBytes(pathname);
+      const filename = pathname.split("/").pop() ?? pathname;
+      zip.file(filename, bytes);
+    }
 
     const archive = await zip.generateAsync({ type: "uint8array" });
-    const today = new Date().toISOString().slice(0, 10);
+    const stamp = utahStamp();
 
     return new NextResponse(Buffer.from(archive), {
       headers: {
         "Content-Type": "application/zip",
-        "Content-Disposition": `attachment; filename="parade-waivers-${today}.zip"`,
+        "Content-Disposition": `attachment; filename="parade-waivers-${stamp}.zip"`,
         "Cache-Control": "no-store",
       },
     });
