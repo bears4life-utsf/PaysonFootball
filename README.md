@@ -119,17 +119,12 @@ Signed PDFs are stored in [Vercel Blob](https://vercel.com/docs/storage/vercel-b
 
 ### Setup
 
-1. In the Vercel project, create a **Blob** store and copy the `BLOB_READ_WRITE_TOKEN`.
-2. Create a long random admin secret for `WAIVER_ADMIN_TOKEN` (for example `openssl rand -hex 32`).
-3. Add both to `.env.local` for local development and to Vercel project env vars for production:
-
-```bash
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
-WAIVER_ADMIN_TOKEN=your-long-random-secret
-```
-
-4. Restart `npm run dev` after changing env vars.
-5. Open the admin list at:
+1. In the Vercel project, create a **Blob** store and connect it to this project.
+2. Vercel should add `BLOB_STORE_ID` (and related Blob vars) automatically. Newer stores use OIDC auth — you do **not** need `BLOB_READ_WRITE_TOKEN` on Vercel.
+3. Create a long random admin secret for `WAIVER_ADMIN_TOKEN` (for example `openssl rand -hex 32`).
+4. Add `WAIVER_ADMIN_TOKEN` under **Settings → Environment Variables** for Production.
+5. **Redeploy** after connecting Blob / adding env vars.
+6. Open the admin list at:
 
 `/admin/waivers?token=YOUR_WAIVER_ADMIN_TOKEN`
 

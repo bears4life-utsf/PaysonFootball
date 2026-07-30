@@ -5,8 +5,8 @@ import { Header } from "@/components/header";
 import { SiteFooter } from "@/components/site-footer";
 import {
   WAIVER_BLOB_PREFIX,
+  assertBlobConfigured,
   parseWaiverPathname,
-  requireBlobToken,
   verifyAdminToken,
   type WaiverListItem,
 } from "@/lib/waiver";
@@ -18,7 +18,7 @@ type PageProps = {
 };
 
 async function listWaivers(): Promise<WaiverListItem[]> {
-  const token = requireBlobToken();
+  assertBlobConfigured();
   const items: WaiverListItem[] = [];
   let cursor: string | undefined;
 
@@ -26,7 +26,6 @@ async function listWaivers(): Promise<WaiverListItem[]> {
     const result = await list({
       prefix: WAIVER_BLOB_PREFIX,
       cursor,
-      token,
     });
 
     for (const blob of result.blobs) {

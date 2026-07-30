@@ -166,10 +166,12 @@ export function verifyAdminToken(token: string | null | undefined) {
   return timingSafeEqual(left, right);
 }
 
-export function requireBlobToken() {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) {
-    throw new Error("BLOB_READ_WRITE_TOKEN is not configured.");
+/** Vercel Blob auth: OIDC (BLOB_STORE_ID) on Vercel, or BLOB_READ_WRITE_TOKEN fallback. */
+export function assertBlobConfigured() {
+  if (process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN) {
+    return;
   }
-  return token;
+  throw new Error(
+    "Blob storage is not configured. Connect a Vercel Blob store to this project, then redeploy.",
+  );
 }

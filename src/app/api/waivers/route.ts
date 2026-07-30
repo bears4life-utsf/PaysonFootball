@@ -4,9 +4,9 @@ import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import {
+  assertBlobConfigured,
   buildWaiverPathname,
   isLikelySigned,
-  requireBlobToken,
   stampWaiverPdf,
   type WaiverSubmission,
 } from "@/lib/waiver";
@@ -62,6 +62,8 @@ export async function POST(request: Request) {
   }
 
   try {
+    assertBlobConfigured();
+
     const pdfBytes = await stampWaiverPdf({
       parentName,
       participantName,
@@ -81,7 +83,6 @@ export async function POST(request: Request) {
       access: "public",
       contentType: "application/pdf",
       addRandomSuffix: false,
-      token: requireBlobToken(),
     });
 
     return NextResponse.json({
@@ -92,14 +93,8 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Could not save the waiver.";
-    if (message.includes("BLOB_READ_WRITE_TOKEN")) {
-      return NextResponse.json(
-        {
-          error:
-            "Waiver storage is not set up yet. In Vercel: Storage → Create Blob store → connect this project, confirm BLOB_READ_WRITE_TOKEN exists under Settings → Environment Variables (Production), then Redeploy.",
-        },
-        { status: 503 },
-      );
+    if (message.includes("Blob storage is not configured")) {
+      return NextResponse.json({ error: message }, { status: 503 });
     }
     return NextResponse.json({ error: message }, { status: 500 });
   }

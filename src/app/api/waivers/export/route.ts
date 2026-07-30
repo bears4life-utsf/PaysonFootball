@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import {
   WAIVER_BLOB_PREFIX,
-  requireBlobToken,
+  assertBlobConfigured,
   verifyAdminToken,
 } from "@/lib/waiver";
 
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const blobToken = requireBlobToken();
+    assertBlobConfigured();
     const zip = new JSZip();
     let cursor: string | undefined;
 
@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
       const result = await list({
         prefix: WAIVER_BLOB_PREFIX,
         cursor,
-        token: blobToken,
       });
 
       for (const blob of result.blobs) {
