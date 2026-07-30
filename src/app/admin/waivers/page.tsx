@@ -13,9 +13,30 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const UTAH_TIME_ZONE = "America/Denver";
+
 type PageProps = {
   searchParams: Promise<{ token?: string }>;
 };
+
+function formatUtahDate(iso: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: UTAH_TIME_ZONE,
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(iso));
+}
+
+function formatUtahTime(iso: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: UTAH_TIME_ZONE,
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(new Date(iso));
+}
 
 async function listWaivers(): Promise<WaiverListItem[]> {
   assertBlobConfigured();
@@ -101,7 +122,7 @@ export default async function AdminWaiversPage({ searchParams }: PageProps) {
                   <th className="px-4 py-3 font-semibold">Participant</th>
                   <th className="px-4 py-3 font-semibold">Parent</th>
                   <th className="px-4 py-3 font-semibold">Date</th>
-                  <th className="px-4 py-3 font-semibold">Submitted</th>
+                  <th className="px-4 py-3 font-semibold">Time</th>
                   <th className="px-4 py-3 font-semibold">PDF</th>
                 </tr>
               </thead>
@@ -119,10 +140,10 @@ export default async function AdminWaiversPage({ searchParams }: PageProps) {
                         {waiver.parentName || "—"}
                       </td>
                       <td className="px-4 py-3 text-[#313a36]">
-                        {waiver.date || "—"}
+                        {formatUtahDate(waiver.uploadedAt)}
                       </td>
                       <td className="px-4 py-3 text-[#313a36]">
-                        {new Date(waiver.uploadedAt).toLocaleString()}
+                        {formatUtahTime(waiver.uploadedAt)}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
