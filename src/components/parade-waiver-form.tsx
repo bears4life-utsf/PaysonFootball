@@ -21,6 +21,10 @@ export function ParadeWaiverForm() {
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [formKey, setFormKey] = useState(0);
+  const [signedPdf, setSignedPdf] = useState<{
+    base64: string;
+    fileName: string;
+  } | null>(null);
 
   const canSubmit =
     parentName.trim().length > 1 &&
@@ -52,10 +56,21 @@ export function ParadeWaiverForm() {
 
       const payload = (await response.json().catch(() => null)) as {
         error?: string;
+        pdfBase64?: string;
+        fileName?: string;
       } | null;
 
       if (!response.ok) {
         throw new Error(payload?.error ?? "Could not submit the waiver.");
+      }
+
+      if (payload?.pdfBase64) {
+        setSignedPdf({
+          base64: payload.pdfBase64,
+          fileName: payload.fileName ?? "signed-parade-waiver.pdf",
+        });
+      } else {
+        setSignedPdf(null);
       }
 
       setParentName("");
@@ -79,15 +94,30 @@ export function ParadeWaiverForm() {
           Waiver submitted
         </h2>
         <p className="mx-auto mt-3 max-w-md text-[#313a36]">
-          Thanks — your parade waiver has been saved. You can close this page.
+          Thanks — your signed parade waiver has been saved with your name, date,
+          participant, and signatures on the PDF.
         </p>
-        <button
-          type="button"
-          onClick={() => setDone(false)}
-          className="focus-ring mt-6 rounded bg-[#075C35] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#043D25]"
-        >
-          Sign another waiver
-        </button>
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          {signedPdf ? (
+            <a
+              href={`data:application/pdf;base64,${signedPdf.base64}`}
+              download={signedPdf.fileName}
+              className="focus-ring rounded bg-[#075C35] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#043D25]"
+            >
+              Download signed PDF
+            </a>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => {
+              setSignedPdf(null);
+              setDone(false);
+            }}
+            className="focus-ring rounded border border-[#C8CDD0] px-5 py-2.5 text-sm font-semibold text-[#090A0A] hover:bg-[#F3F4F4]"
+          >
+            Sign another waiver
+          </button>
+        </div>
       </div>
     );
   }

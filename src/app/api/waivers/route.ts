@@ -89,6 +89,8 @@ export async function POST(request: Request) {
       ok: true,
       pathname: blob.pathname,
       url: blob.url,
+      pdfBase64: Buffer.from(pdfBytes).toString("base64"),
+      fileName: pathname.split("/").pop() ?? "signed-waiver.pdf",
     });
   } catch (error) {
     const message =

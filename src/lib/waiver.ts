@@ -2,7 +2,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 
 import { WAIVER_BLOB_PREFIX } from "@/lib/waiver-paths";
 
@@ -12,16 +12,18 @@ export {
   WAIVER_PREVIEW_PUBLIC_PATH,
 } from "@/lib/waiver-paths";
 
+const PAGE_WIDTH = 612;
 const PAGE_HEIGHT = 792;
 
-/** Coordinates tuned to Parade Waiver 2026 (letter, origin bottom-left). */
+/** Coordinates for letter page, origin bottom-left. */
 const LAYOUT = {
-  parentName: { x: 90, y: PAGE_HEIGHT - 270, size: 11 },
-  date: { x: 108, y: PAGE_HEIGHT - 352, size: 11 },
-  participant: { x: 278, y: PAGE_HEIGHT - 380, size: 11 },
-  udotSignature: { x: 72, y: PAGE_HEIGHT - 418, width: 240, height: 36 },
-  citySignature: { x: 72, y: PAGE_HEIGHT - 655, width: 240, height: 36 },
+  parentName: { x: 90, y: PAGE_HEIGHT - 274, size: 12, boxW: 280, boxH: 16 },
+  date: { x: 108, y: PAGE_HEIGHT - 356, size: 12, boxW: 130, boxH: 16 },
+  participant: { x: 278, y: PAGE_HEIGHT - 384, size: 12, boxW: 260, boxH: 16 },
+  udotSignature: { x: 72, y: PAGE_HEIGHT - 450, width: 280, height: 42 },
+  citySignature: { x: 72, y: PAGE_HEIGHT - 688, width: 280, height: 42 },
 } as const;
+
 
 export type WaiverSubmission = {
   parentName: string;
@@ -97,48 +99,73 @@ export function isLikelySigned(dataUrl: string) {
   }
 }
 
+function formatDateForPdf(value: string) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!match) return value.trim();
+  const [, year, month, day] = match;
+  return `${Number(month)}/${Number(day)}/${year}`;
+}
+
+function drawField(
+  page: PDFPage,
+  font: PDFFont,
+  text: string,
+  layout: { x: number; y: number; size: number; boxW: number; boxH: number },
+) {
+  page.drawRectangle({
+    x: layout.x - 2,
+    y: layout.y - 3,
+    width: layout.boxW,
+    height: layout.boxH,
+    color: rgb(1, 1, 1),
+  });
+  page.drawText(text, {
+    x: layout.x,
+    y: layout.y,
+    size: layout.size,
+    font,
+    color: rgb(0.05, 0.05, 0.05),
+    maxWidth: layout.boxW - 4,
+  });
+}
+
 export async function stampWaiverPdf(submission: WaiverSubmission) {
-  const templatePath = path.join(
+  // Compose onto the rendered form image so filled fields always sit on top.
+  const previewPath = path.join(
     process.cwd(),
     "public",
     "waivers",
-    "parade-waiver-2026.pdf",
+    "parade-waiver-2026.png",
   );
-  const templateBytes = await readFile(templatePath);
-  const pdf = await PDFDocument.load(templateBytes);
-  const page = pdf.getPages()[0];
-  if (!page) {
-    throw new Error("Waiver PDF has no pages.");
-  }
-
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
-  const textColor = rgb(0.05, 0.05, 0.05);
-
-  page.drawText(submission.parentName.trim(), {
-    x: LAYOUT.parentName.x,
-    y: LAYOUT.parentName.y,
-    size: LAYOUT.parentName.size,
-    font,
-    color: textColor,
+  const previewBytes = await readFile(previewPath);
+  const pdf = await PDFDocument.create();
+  const page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+  const background = await pdf.embedPng(previewBytes);
+  page.drawImage(background, {
+    x: 0,
+    y: 0,
+    width: PAGE_WIDTH,
+    height: PAGE_HEIGHT,
   });
 
-  page.drawText(submission.date.trim(), {
-    x: LAYOUT.date.x,
-    y: LAYOUT.date.y,
-    size: LAYOUT.date.size,
-    font,
-    color: textColor,
-  });
+  const font = await pdf.embedFont(StandardFonts.HelveticaBold);
 
-  page.drawText(submission.participantName.trim(), {
-    x: LAYOUT.participant.x,
-    y: LAYOUT.participant.y,
-    size: LAYOUT.participant.size,
-    font,
-    color: textColor,
-  });
+  drawField(page, font, submission.parentName.trim(), LAYOUT.parentName);
+  drawField(page, font, formatDateForPdf(submission.date), LAYOUT.date);
+  drawField(page, font, submission.participantName.trim(), LAYOUT.participant);
 
-  const udotPng = await pdf.embedPng(dataUrlToBytes(submission.udotSignaturePng));
+  const udotBytes = dataUrlToBytes(submission.udotSignaturePng);
+  const cityBytes = dataUrlToBytes(submission.citySignaturePng);
+  const udotPng = await pdf.embedPng(udotBytes);
+  const cityPng = await pdf.embedPng(cityBytes);
+
+  page.drawRectangle({
+    x: LAYOUT.udotSignature.x,
+    y: LAYOUT.udotSignature.y,
+    width: LAYOUT.udotSignature.width,
+    height: LAYOUT.udotSignature.height,
+    color: rgb(1, 1, 1),
+  });
   page.drawImage(udotPng, {
     x: LAYOUT.udotSignature.x,
     y: LAYOUT.udotSignature.y,
@@ -146,7 +173,13 @@ export async function stampWaiverPdf(submission: WaiverSubmission) {
     height: LAYOUT.udotSignature.height,
   });
 
-  const cityPng = await pdf.embedPng(dataUrlToBytes(submission.citySignaturePng));
+  page.drawRectangle({
+    x: LAYOUT.citySignature.x,
+    y: LAYOUT.citySignature.y,
+    width: LAYOUT.citySignature.width,
+    height: LAYOUT.citySignature.height,
+    color: rgb(1, 1, 1),
+  });
   page.drawImage(cityPng, {
     x: LAYOUT.citySignature.x,
     y: LAYOUT.citySignature.y,
