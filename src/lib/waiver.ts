@@ -23,8 +23,8 @@ const LAYOUT = {
   parentName: { x: 92, y: PAGE_HEIGHT - 272, size: 11 },
   date: { x: 110, y: PAGE_HEIGHT - 354, size: 11 },
   participant: { x: 280, y: PAGE_HEIGHT - 382, size: 11 },
-  udotSignature: { x: 340, y: PAGE_HEIGHT - 424, width: 200, height: 22 },
-  citySignature: { x: 340, y: PAGE_HEIGHT - 659, width: 200, height: 22 },
+  udotSignature: { x: 340, y: PAGE_HEIGHT - 420, width: 200, height: 24 },
+  citySignature: { x: 340, y: PAGE_HEIGHT - 655, width: 200, height: 24 },
 } as const;
 
 
@@ -168,8 +168,7 @@ export async function stampWaiverPdf(submission: WaiverSubmission) {
     const height = image.height * scale;
     return {
       x: box.x,
-      // Sit on the signature line (bottom of the stamp box).
-      y: box.y,
+      y: box.y + (box.height - height) / 2,
       width,
       height,
     };
