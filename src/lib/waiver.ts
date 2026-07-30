@@ -23,8 +23,8 @@ const LAYOUT = {
   parentName: { x: 92, y: PAGE_HEIGHT - 272, size: 11 },
   date: { x: 110, y: PAGE_HEIGHT - 354, size: 11 },
   participant: { x: 280, y: PAGE_HEIGHT - 382, size: 11 },
-  udotSignature: { x: 340, y: PAGE_HEIGHT - 420, width: 200, height: 24 },
-  citySignature: { x: 340, y: PAGE_HEIGHT - 655, width: 200, height: 24 },
+  udotSignature: { x: 352, y: PAGE_HEIGHT - 420, width: 200, height: 24 },
+  citySignature: { x: 352, y: PAGE_HEIGHT - 655, width: 200, height: 24 },
 } as const;
 
 
