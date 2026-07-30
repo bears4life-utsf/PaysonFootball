@@ -17,15 +17,16 @@ const PAGE_HEIGHT = 792;
 
 /**
  * Stamp positions on letter page (origin bottom-left).
- * Tuned so text sits on the blank lines and signatures sit under the labels.
+ * Signature blanks start after the printed label on each signature line.
  */
 const LAYOUT = {
   parentName: { x: 92, y: PAGE_HEIGHT - 272, size: 11 },
   date: { x: 110, y: PAGE_HEIGHT - 354, size: 11 },
   participant: { x: 280, y: PAGE_HEIGHT - 382, size: 11 },
-  udotSignature: { x: 72, y: PAGE_HEIGHT - 448, width: 260, height: 28 },
-  citySignature: { x: 72, y: PAGE_HEIGHT - 678, width: 260, height: 28 },
+  udotSignature: { x: 340, y: PAGE_HEIGHT - 420, width: 200, height: 24 },
+  citySignature: { x: 340, y: PAGE_HEIGHT - 655, width: 200, height: 24 },
 } as const;
+
 
 export type WaiverSubmission = {
   parentName: string;
@@ -157,18 +158,24 @@ export async function stampWaiverPdf(submission: WaiverSubmission) {
   const udotPng = await pdf.embedPng(dataUrlToBytes(submission.udotSignaturePng));
   const cityPng = await pdf.embedPng(dataUrlToBytes(submission.citySignaturePng));
 
-  page.drawImage(udotPng, {
-    x: LAYOUT.udotSignature.x,
-    y: LAYOUT.udotSignature.y,
-    width: LAYOUT.udotSignature.width,
-    height: LAYOUT.udotSignature.height,
-  });
-  page.drawImage(cityPng, {
-    x: LAYOUT.citySignature.x,
-    y: LAYOUT.citySignature.y,
-    width: LAYOUT.citySignature.width,
-    height: LAYOUT.citySignature.height,
-  });
+  // Keep signature aspect ratio so cropped ink isn't stretched.
+  const fitSignature = (
+    image: { width: number; height: number },
+    box: { x: number; y: number; width: number; height: number },
+  ) => {
+    const scale = Math.min(box.width / image.width, box.height / image.height);
+    const width = image.width * scale;
+    const height = image.height * scale;
+    return {
+      x: box.x,
+      y: box.y + (box.height - height) / 2,
+      width,
+      height,
+    };
+  };
+
+  page.drawImage(udotPng, fitSignature(udotPng, LAYOUT.udotSignature));
+  page.drawImage(cityPng, fitSignature(cityPng, LAYOUT.citySignature));
 
   return pdf.save();
 }

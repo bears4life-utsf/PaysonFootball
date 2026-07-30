@@ -6,6 +6,7 @@ import {
   SignaturePad,
   type SignaturePadHandle,
 } from "@/components/signature-pad";
+import { cropSignatureDataUrl } from "@/lib/crop-signature";
 import {
   WAIVER_PDF_PUBLIC_PATH,
   WAIVER_PREVIEW_PUBLIC_PATH,
@@ -52,11 +53,16 @@ export function ParadeWaiverForm() {
     setError(null);
 
     try {
-      const udotSignaturePng = udotRef.current?.toDataURL() ?? "";
-      const citySignaturePng = cityRef.current?.toDataURL() ?? "";
-      if (!udotSignaturePng || !citySignaturePng) {
+      const udotRaw = udotRef.current?.toDataURL() ?? "";
+      const cityRaw = cityRef.current?.toDataURL() ?? "";
+      if (!udotRaw || !cityRaw) {
         throw new Error("Both signatures are required.");
       }
+
+      const [udotSignaturePng, citySignaturePng] = await Promise.all([
+        cropSignatureDataUrl(udotRaw),
+        cropSignatureDataUrl(cityRaw),
+      ]);
 
       const response = await fetch("/api/waivers", {
         method: "POST",
