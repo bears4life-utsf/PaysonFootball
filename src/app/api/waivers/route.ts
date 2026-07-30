@@ -92,7 +92,15 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Could not save the waiver.";
-    const status = message.includes("BLOB_READ_WRITE_TOKEN") ? 503 : 500;
-    return NextResponse.json({ error: message }, { status });
+    if (message.includes("BLOB_READ_WRITE_TOKEN")) {
+      return NextResponse.json(
+        {
+          error:
+            "Waiver storage is not set up yet. In Vercel: Storage → Create Blob store → connect this project, confirm BLOB_READ_WRITE_TOKEN exists under Settings → Environment Variables (Production), then Redeploy.",
+        },
+        { status: 503 },
+      );
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
