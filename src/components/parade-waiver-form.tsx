@@ -145,22 +145,12 @@ export function ParadeWaiverForm() {
   return (
     <div className="space-y-6">
       <div className="overflow-hidden rounded border border-[#C8CDD0] bg-white">
-        <div className="border-b border-[#C8CDD0] px-4 py-3 sm:px-5">
-          <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[#090A0A]">
-            Read the waiver
-          </h2>
-          <p className="mt-1 text-sm text-[#313a36]">
-            Review the document, then complete the form below.
-          </p>
-        </div>
-        <div className="bg-[#E8EAEB]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={WAIVER_PREVIEW_PUBLIC_PATH}
-            alt="Santaquin Orchard Days Parade Waiver"
-            className="mx-auto h-auto w-full max-w-3xl bg-white"
-          />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={WAIVER_PREVIEW_PUBLIC_PATH}
+          alt="Santaquin Orchard Days Parade Waiver"
+          className="h-auto w-full bg-white"
+        />
         <div className="border-t border-[#C8CDD0] px-4 py-3 text-sm sm:px-5">
           <a
             href={WAIVER_PDF_PUBLIC_PATH}
