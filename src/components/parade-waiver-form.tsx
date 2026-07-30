@@ -141,27 +141,17 @@ export function ParadeWaiverForm() {
         </label>
       </div>
 
-      <div className="space-y-3 border-t border-[#C8CDD0] pt-5">
-        <p className="text-sm font-semibold uppercase tracking-wide text-[#075C35]">
-          UDOT Waiver
-        </p>
-        <SignaturePad
-          key={`udot-${formKey}`}
-          label="Signature of participant or parent/guardian of minor"
-          onChange={setUdotSignaturePng}
-        />
-      </div>
+      <SignaturePad
+        key={`udot-${formKey}`}
+        label="Signature of participant or parent/guardian of minor"
+        onChange={setUdotSignaturePng}
+      />
 
-      <div className="space-y-3 border-t border-[#C8CDD0] pt-5">
-        <p className="text-sm font-semibold uppercase tracking-wide text-[#075C35]">
-          Santaquin City Waiver
-        </p>
-        <SignaturePad
-          key={`city-${formKey}`}
-          label="Signature of participant or parent/guardian of minor"
-          onChange={setCitySignaturePng}
-        />
-      </div>
+      <SignaturePad
+        key={`city-${formKey}`}
+        label="Signature of participant or parent/guardian of minor"
+        onChange={setCitySignaturePng}
+      />
 
       {error ? (
         <p className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800" role="alert">

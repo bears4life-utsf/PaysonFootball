@@ -21,7 +21,7 @@ export function SignaturePad({ label, onChange }: SignaturePadProps) {
       if (!parent) return;
       const ratio = window.devicePixelRatio || 1;
       const width = parent.clientWidth;
-      const height = 140;
+      const height = 72;
       canvas.width = Math.floor(width * ratio);
       canvas.height = Math.floor(height * ratio);
       canvas.style.width = `${width}px`;
