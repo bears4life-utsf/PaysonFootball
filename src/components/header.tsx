@@ -50,8 +50,9 @@ export function Header() {
       >
         <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded">
           <BrandLogo size="sm" priority />
-          <p className="truncate font-[family-name:var(--font-display)] text-base uppercase tracking-wide sm:text-lg">
-            Payson Lions Football
+          <p className="min-w-0 font-[family-name:var(--font-display)] text-base uppercase tracking-wide sm:text-lg">
+            <span className="sm:hidden">Payson Lions</span>
+            <span className="hidden sm:inline">Payson Lions Football</span>
           </p>
         </Link>
 

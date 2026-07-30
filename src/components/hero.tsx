@@ -32,7 +32,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto flex h-[360px] w-full max-w-6xl flex-col justify-center px-4 py-6 sm:h-[410px] sm:px-6 md:h-[440px] lg:h-[460px]">
+      <div className="relative mx-auto flex min-h-[300px] w-full max-w-6xl flex-col justify-start px-4 pb-8 pt-6 sm:min-h-[380px] sm:justify-center sm:px-6 sm:pb-10 sm:pt-8 md:min-h-[420px] lg:min-h-[440px]">
         <div className="motion-safe:hero-rise flex items-center gap-2.5">
           <BrandLogo size="lg" priority />
           <p className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.22em] text-[#C8CDD0]">
