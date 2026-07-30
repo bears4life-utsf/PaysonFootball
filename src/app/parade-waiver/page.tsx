@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { ParadeWaiverForm } from "@/components/parade-waiver-form";
 import { SiteFooter } from "@/components/site-footer";
-import { WAIVER_PDF_PUBLIC_PATH } from "@/lib/waiver";
+import { WaiverDocumentViewer } from "@/components/waiver-document-viewer";
 
 export const metadata: Metadata = {
   title: "Parade Waiver",
@@ -31,34 +31,11 @@ export default function ParadeWaiverPage() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-12">
-          <div className="overflow-hidden rounded border border-[#C8CDD0] bg-white">
-            <div className="border-b border-[#C8CDD0] px-4 py-3 sm:px-5">
-              <h2 className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[#090A0A]">
-                Santaquin Orchard Days Parade Waiver
-              </h2>
-              <p className="mt-1 text-sm text-[#313a36]">
-                Read the full waiver, then complete the form underneath.
-              </p>
-            </div>
-            <iframe
-              title="Parade waiver PDF"
-              src={`${WAIVER_PDF_PUBLIC_PATH}#view=FitH`}
-              className="h-[70vh] w-full bg-[#E8EAEB]"
-            />
-            <div className="border-t border-[#C8CDD0] px-4 py-3 text-sm text-[#313a36] sm:px-5">
-              <a
-                href={WAIVER_PDF_PUBLIC_PATH}
-                target="_blank"
-                rel="noreferrer"
-                className="focus-ring rounded font-medium text-[#075C35] underline underline-offset-2"
-              >
-                Open PDF in a new tab
-              </a>
-            </div>
+        <section className="mx-auto w-full max-w-6xl space-y-8 py-10 sm:px-6 sm:py-12">
+          <WaiverDocumentViewer />
+          <div className="px-4 sm:px-0">
+            <ParadeWaiverForm />
           </div>
-
-          <ParadeWaiverForm />
         </section>
       </main>
       <SiteFooter />

@@ -4,8 +4,13 @@ import path from "node:path";
 
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
-export const WAIVER_BLOB_PREFIX = "waivers/";
-export const WAIVER_PDF_PUBLIC_PATH = "/waivers/parade-waiver-2026.pdf";
+import { WAIVER_BLOB_PREFIX } from "@/lib/waiver-paths";
+
+export {
+  WAIVER_BLOB_PREFIX,
+  WAIVER_PDF_PUBLIC_PATH,
+  WAIVER_PREVIEW_PUBLIC_PATH,
+} from "@/lib/waiver-paths";
 
 const PAGE_HEIGHT = 792;
 
