@@ -36,6 +36,7 @@ export function Header() {
   }, [compact]);
 
   const scheduleActive = pathname === "/";
+  const teamsActive = pathname === "/teams";
   const waiverActive = pathname === "/parade-waiver";
 
   return (
@@ -65,6 +66,15 @@ export function Header() {
             }`}
           >
             Schedules
+          </Link>
+          <Link
+            href="/teams"
+            aria-current={teamsActive ? "page" : undefined}
+            className={`focus-ring rounded text-sm font-medium transition ${
+              teamsActive ? "text-white" : "text-white/85 hover:text-white"
+            }`}
+          >
+            Teams
           </Link>
           <Link
             href="/parade-waiver"

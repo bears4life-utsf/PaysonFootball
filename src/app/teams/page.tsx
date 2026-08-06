@@ -3,14 +3,16 @@ import Image from "next/image";
 
 import { Header } from "@/components/header";
 import { SiteFooter } from "@/components/site-footer";
-import { TeamProfileCard } from "@/components/team-profile-card";
+import { TeamsDirectory } from "@/components/teams-directory";
 import { teamProfiles } from "@/data/team-profiles";
 
 export const metadata: Metadata = {
   title: "Teams",
   description:
-    "Meet the Payson Lions football teams and coaching staffs in Payson, Utah.",
+    "Meet the Payson Lions Varsity football team, coaching staff, and roster in Payson, Utah.",
 };
+
+const varsityTeam = teamProfiles.find((team) => team.id === "varsity");
 
 export default function TeamsPage() {
   return (
@@ -35,26 +37,21 @@ export default function TeamsPage() {
             />
           </div>
 
-          <div className="relative mx-auto flex h-[220px] w-full max-w-6xl flex-col justify-center px-4 sm:h-[260px] sm:px-6 md:h-[280px]">
-            <h1 className="font-[family-name:var(--font-display)] text-5xl uppercase tracking-tight sm:text-6xl">
+          <div className="relative mx-auto flex h-[200px] w-full max-w-6xl flex-col justify-center px-4 sm:h-[240px] sm:px-6">
+            <h1 className="hero-rise font-[family-name:var(--font-display)] text-5xl uppercase tracking-tight sm:text-6xl">
               Teams
             </h1>
-            <p className="mt-3 max-w-xl text-base text-[#F3F4F4]/90 sm:text-lg">
-              Meet the Payson Lions football teams and coaching staffs.
+            <p
+              className="hero-rise mt-3 max-w-xl text-base text-[#F3F4F4]/90 sm:text-lg"
+              style={{ animationDelay: "80ms" }}
+            >
+              Varsity coaching staff and 2026–27 roster.
             </p>
           </div>
         </section>
 
         <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
-          <p className="mb-6 text-sm text-[#6b716e]">
-            Coaching names below are placeholders for layout and will be replaced with official
-            staff information.
-          </p>
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {teamProfiles.map((team) => (
-              <TeamProfileCard key={team.id} team={team} />
-            ))}
-          </div>
+          {varsityTeam ? <TeamsDirectory team={varsityTeam} /> : null}
         </section>
       </main>
       <SiteFooter />
